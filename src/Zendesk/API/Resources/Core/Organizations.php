@@ -51,9 +51,10 @@ class Organizations extends ResourceAbstract
 
         $this->setRoutes(
             [
-                'autocomplete' => $this->resourceName . '/autocomplete.json',
-                'related'      => $this->resourceName . '/{id}/related.json',
-                'search'       => $this->resourceName . '/search.json',
+                'autocomplete' 	 => $this->resourceName . '/autocomplete.json',
+                'related'      	 => $this->resourceName . '/{id}/related.json',
+                'search'       	 => $this->resourceName . '/search.json',
+                'createOrUpdate' => $this->resourceName . '/create_or_update.json',
             ]
         );
     }
@@ -139,5 +140,22 @@ class Organizations extends ResourceAbstract
         $params['external_id'] = $external_id;
 
         return $this->client->get($this->getRoute(__FUNCTION__), $params);
+    }
+
+    /**
+     * Create or updates an organization
+     *
+     * @param array  $params
+     *
+     * @param string $routeKey
+     * @return null|\stdClass
+     */
+    public function createOrUpdate(array $params, $routeKey = __FUNCTION__)
+    {
+        $route = $this->getRoute($routeKey, $params);
+        return $this->client->post(
+            $route,
+            [$this->objectName => $params]
+        );
     }
 }
